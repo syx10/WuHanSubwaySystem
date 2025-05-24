@@ -1,0 +1,13 @@
+# Eclipse 项目文件
+.classpath
+.project
+.settings/
+bin/
+
+# 编译输出
+*.class
+*.war
+*.ear
+
+# 日志文件
+*.log
