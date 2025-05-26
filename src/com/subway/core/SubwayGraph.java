@@ -53,10 +53,10 @@ public class SubwayGraph {
     }
 
     // 内部类：边和节点
-    private static class Edge {
-        String target;
+    public static class Edge {
+        public String target;
         double distance;
-        String line;
+        public String line;
 
         public Edge(String target, double distance, String line) {
             this.target = target;
@@ -65,7 +65,7 @@ public class SubwayGraph {
         }
     }
 
-    private static class Node implements Comparable<Node> {
+    static class Node implements Comparable<Node> {
         String station;
         double distance;
 
@@ -78,5 +78,8 @@ public class SubwayGraph {
         public int compareTo(Node other) {
             return Double.compare(this.distance, other.distance);
         }
+    }
+    public Map<String, List<Edge>> getAdjacencyList() {
+        return adjacencyList;
     }
 }

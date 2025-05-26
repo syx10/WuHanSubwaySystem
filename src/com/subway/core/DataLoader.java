@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.subway.mode1.Station;
+import com.subway.model.Station;
 
 public class DataLoader {
     public static Map<String, Station> loadStations(String filePath) throws IOException {
@@ -40,8 +40,14 @@ public class DataLoader {
                 String stationB = parts[2];
                 double distance = Double.parseDouble(parts[3]);
                 graph.addEdge(stationA, stationB, distance, lineName);
+             // 在 DataLoader.buildGraph() 中
+                if (parts.length < 4) {
+                    throw new IOException("文件格式错误：" + line);
+                }
             }
+            
         }
         return graph;
+        
     }
 }

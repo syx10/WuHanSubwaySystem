@@ -1,4 +1,4 @@
-package com.subway.mode1;
+package com.subway.model;
 
 import java.util.HashSet;
 import java.util.Set;
