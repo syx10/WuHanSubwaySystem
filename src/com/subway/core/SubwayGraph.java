@@ -55,7 +55,7 @@ public class SubwayGraph {
     // 内部类：边和节点
     public static class Edge {
         public String target;
-        double distance;
+        public double distance;
         public String line;
 
         public Edge(String target, double distance, String line) {
