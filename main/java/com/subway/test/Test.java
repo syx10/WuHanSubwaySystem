@@ -3,17 +3,31 @@ package com.subway.test;
 import com.subway.core.*;
 import com.subway.model.Station;
 import com.subway.util.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Test {
     public static void main(String[] args) {
         try {
-            // 1. 加载地铁数据
-            Map<String, Station> stations = DataLoader.loadStations("subway.txt");
-            SubwayGraph graph = DataLoader.buildGraph("subway.txt");
-            FareCalculator fareCalculator = new FareCalculator();
-            
+            // 使用 FileInputStream 读取文件
+            File file = new File("main/resources/subway.txt");
+            System.out.println("文件存在: " + file.exists());
+            FileInputStream inputStream1 = new FileInputStream(file);
+            InputStreamReader reader1 = new InputStreamReader(inputStream1);
+
+            // 加载站点信息
+            Map<String, Station> stations = DataLoader.loadStations(reader1);
+
+            // 重新打开文件输入流
+            FileInputStream inputStream2 = new FileInputStream(file);
+            InputStreamReader reader2 = new InputStreamReader(inputStream2);
+
+            // 构建地铁图
+            SubwayGraph graph = DataLoader.buildGraph(reader2);
+
             // 2. 功能1：识别所有中转站
             Set<Station> transferStations = new HashSet<>();
             for (Station station : stations.values()) {
@@ -33,15 +47,15 @@ public class Test {
                 s.station + " - 距离：" + s.distance + "公里"
             ));
 
-            // 4. 功能3：查找所有无环路径（示例：华中科技大学 → 光谷大道）
+            // 4. 功能3：查找所有无环路径（示例：华中科技大学 → 湖口）
             PathFinder pathFinder = new PathFinder(graph);
             List<List<String>> allPaths = 
-                pathFinder.findAllPaths("华中科技大学", "光谷大道");
+                pathFinder.findAllPaths("华中科技大学", "湖口");
             System.out.println("\n=== 功能3：所有无环路径 ===");
             allPaths.forEach(path -> System.out.println("路径：" + path));
 
             // 5. 功能4：查找最短路径
-            List<String> shortestPath = graph.findShortestPath("华中科技大学", "光谷大道");
+            List<String> shortestPath = graph.findShortestPath("华中科技大学", "湖口");
             System.out.println("\n=== 功能4：最短路径 ===");
             System.out.println("路径：" + shortestPath);
 
@@ -53,8 +67,8 @@ public class Test {
             double totalDistance = calculatePathDistance(shortestPath, graph);
             System.out.println("\n=== 功能6/7：票价计算 ===");
             System.out.println("总距离：" + totalDistance + "公里");
-            System.out.println("普通票价：" + fareCalculator.calculateFare(totalDistance) + "元");
-            System.out.println("武汉通票价：" + fareCalculator.calculateWuhanTongFare(totalDistance) + "元");
+            System.out.println("普通票价：" + FareCalculator.calculateFare(totalDistance) + "元");
+            System.out.println("武汉通票价：" + FareCalculator.calculateWuhanTongFare(totalDistance) + "元");
             System.out.println("日票票价：0元（已购买日票）");
 
         } catch (IOException e) {
